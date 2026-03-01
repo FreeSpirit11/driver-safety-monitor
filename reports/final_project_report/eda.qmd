@@ -1,0 +1,94 @@
+## Pre-Processing and Exploratory Data Analysis
+
+### Pre-Processing
+
+Pre-processing refers to the set of techniques used to clean and prepare raw data for input into a machine learning model. This includes operations such as resizing images, normalizing data, handling missing values, encoding categorical variables, and generating sequences or features required by the model. Effective pre-processing ensures data consistency, reduces noise, and improves model performance.
+
+### Exploratory Data Analysis (EDA)
+
+Exploratory Data Analysis (EDA) is the process of analyzing and visualizing datasets to uncover patterns, spot anomalies, test hypotheses, and check assumptions. It involves techniques such as plotting distributions, inspecting class balance, and summarizing statistical properties of the features. EDA provides critical insights that guide model selection, feature engineering, and validation strategies.
+## Dataset Collection
+
+The dataset used in this project comes from multiple sources, including:
+
+- **State Farm Distracted Driver Detection Dataset**  
+  A publicly available dataset containing real-world images of drivers performing various activities (e.g., texting, talking on the phone, eating), categorized into 10 labeled classes.
+
+- **Custom DAD-style Video Dataset**  
+  Manually recorded driver videos with annotations for focus level, drowsiness, and emotional microexpressions. These videos were segmented and labeled to match the frame rate of the real-time system (30 FPS).
+
+These datasets provide diverse conditions, angles, and driver demographics, which help the model generalize better during training and inference.
+
+---
+
+## Data Pre-processing
+
+Effective data pre-processing is crucial to ensure the quality and consistency of the input data before feeding it to the machine learning models.
+
+### Handling Missing Values
+Missing values can arise due to face detection failures or inconsistent landmark extraction in some video frames. To handle this:
+- Frames with incomplete landmark data are discarded.
+- For sequence-based models like LSTM, only complete 30-frame sequences are retained.
+- In some cases, interpolation is used to fill short gaps.
+
+### Data Size and Dimensionality
+High frame rates and video-based data can lead to large volumes of data:
+- Each video is broken down into 30-frame sequences.
+- Feature vectors such as facial keypoints are extracted to reduce dimensionality.
+- Efficient storage formats (e.g., `.npy`, `.pt`) are used to manage memory overhead.
+
+Some deep learning algorithms (e.g., LSTM) are more sensitive to long sequences, so chunking is used to make training more efficient.
+
+### Scaling of Variables
+Scaling is essential when working with models like LSTM or ResNet:
+- Facial keypoints are normalized relative to face size.
+- Pixel values in image-based models are scaled between 0 and 1.
+- This ensures that no feature disproportionately influences the model.
+
+### Outliers
+Outliers, such as blurred frames or extreme head turns, can mislead training:
+- Detected using visualization and statistical thresholds.
+- Either removed or smoothed using temporal filters (moving average, median filters).
+
+### Clustering (if applicable)
+In the microexpression model, facial embeddings can form clusters corresponding to different emotional states:
+- Dimensionality reduction techniques like PCA or t-SNE were used to visualize clusters.
+- K-means was tested to confirm separability, and the majority-voting approach helped in aggregating weak predictions.
+
+### Data Transformation
+Several transformations improve learning:
+- For the attentiveness model, directional vectors (nose to eyes, etc.) are computed from landmarks.
+- Grayscale conversion simplifies emotion detection without losing crucial features.
+- Temporal smoothing over sequence windows helps reduce noise.
+
+---
+
+Overall, these pre-processing strategies ensure that the models receive clean, normalized, and structured input data that enhances their predictive power and generalization.
+
+## Exploratory Data Analysis and Visualisations
+
+Exploratory Data Analysis (EDA) plays a crucial role in understanding the structure, quality, and hidden patterns of the dataset before applying machine learning models. It helps in making informed decisions during model design and improves overall system performance.
+
+
+
+### 1. Feature Selection
+Feature selection identifies the most informative and relevant variables for modeling:
+- For attentiveness detection, directional vectors (from nose to eyes, etc.) are prioritized.
+- For drowsiness detection, features like EAR and blink rate are retained.
+- For emotion detection, spatial patterns in grayscale pixel intensity are emphasized.
+
+Redundant or non-contributing features are removed to reduce overfitting and improve model interpretability.
+
+### 2. Dimensionality Reduction
+When dealing with high-dimensional data such as facial landmarks or CNN-generated embeddings:
+- **Principal Component Analysis (PCA)** and **t-SNE** are employed to reduce feature dimensions while preserving variance.
+- Dimensionality reduction improves model training time and helps in visualizing data clusters (e.g., emotion categories).
+
+These techniques also help in validating whether the features separate well across different classes, which is critical for classifier effectiveness.
+
+---
+
+**Conclusion**:  
+EDA not only provides valuable insights into the nature of the data but also ensures that the features selected for modeling are meaningful and non-redundant. This step is critical for enhancing the performance and interpretability of the driver monitoring models.
+
+

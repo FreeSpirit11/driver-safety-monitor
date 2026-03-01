@@ -1,0 +1,15 @@
+# Abstract {.unnumbered}
+
+This project focuses on developing an AI-based system to monitor and predict driver behavior with the goal of improving road safety. 
+By using video analysis, GPS data, and vehicle parameters such as speed, acceleration, and braking, the system detects unsafe driving patterns in real-time. It provides timely feedback to drivers, helping them correct risky behavior and adopt safer driving habits. 
+The main objective is to reduce accidents and promote responsible driving through intelligent, data-driven insights
+
+## Acknowledgment
+
+This project has been a significant learning experience, combining multiple disciplines such as computer vision, deep learning, and real-time system integration. I would like to acknowledge the valuable assistance of AI tools, particularly ChatGPT, which supported the writing process of this report. The AI was utilized to improve the clarity, coherence, and technical articulation of complex concepts, as well as to ensure proper formatting and structure throughout the documentation.
+
+It is important to emphasize that while generative AI tools contributed to enhancing the written presentation, all core development work — including dataset curation, preprocessing, model training, evaluation, optimization, and real-time inference — was independently conceptualized and implemented by me. The ideas, coding logic, architecture design, experimentation, and debugging reflect original effort, critical thinking, and practical application of machine learning and computer vision knowledge.
+
+Furthermore, all external resources, including datasets, pre-trained models, or open-source libraries, have been properly cited in the relevant sections of this report. The final system represents a genuine and hands-on implementation of a real-time driver monitoring solution, grounded in both theoretical understanding and practical experimentation.
+
+Special thanks to the mentors, teammates, and the institution (Sabudh Foundation) for their guidance and support throughout the course of this project.

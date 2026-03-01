@@ -1,0 +1,52 @@
+project:
+  type: book
+
+book:
+  title: "Final Project Report"
+  author: "Kanika Dhawan , Mansi Yadav ,Prince , Vishal , Rahul Nayak "
+  date: "6/16/2025"
+  chapters:
+    - abstract.qmd
+    - index.qmd
+    - intro.qmd
+    - eda.qmd
+    - methodology.qmd
+    - results.qmd
+    - conclusion.qmd
+    - references.qmd
+  reader-mode: true
+  page-footer: 
+     left : |
+        Dhawan K. , Yadav M. , Prince, Vishal , Nayak .R.
+     right : |
+          Driver Monitoring System — Sabudh Foundation
+  chapters:
+    - index.qmd
+    - final_project_report/abstract.qmd
+    - final_project_report/intro.qmd
+    - final_project_report/eda.qmd
+    - final_project_report/methadology.qmd
+    - final_project_report/results.qmd
+    - final_project_report/conclusion.qmd
+    - final_project_report/refrences.qmd
+          
+
+
+bibliography: references.bib
+
+format:
+  # html:
+  #   theme: cosmo
+  pdf:
+    documentclass: scrreport
+    lof: true
+    lot: true
+    geometry:
+      - top=30mm
+      - left=20mm
+      - heightrounded
+    fontfamily: libertinus
+    colorlinks: true
+    format: PrettyPDF-pdf
+  # epub:
+  #   cover-image: cover.png

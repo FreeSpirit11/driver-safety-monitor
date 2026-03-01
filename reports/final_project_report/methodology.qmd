@@ -1,0 +1,408 @@
+# Methodology
+
+To build our AI-based Driver Behavior and Safety system, we followed a structured process—from choosing the right tools to combining
+multiple AI models into a unified safety score. This section walks through each step, explains the logic behind our choices, and 
+describes how the system works in real-time
+
+
+## Tools & Platforms Used
+
+Python was used as the primary programming language due to its rich ecosystem for machine learning and image processing. The following libraries and tools were leveraged:
+
+1. OpenCV for image and video preprocessing.
+
+2. MediaPipe for real-time facial landmark detection.
+
+3. TensorFlow and Keras for deep learning model development.
+
+4. NumPy and Pandas for data manipulation.
+
+5. Matplotlib and Seaborn for visualization.
+
+Experiments were conducted using:
+
+1. Google Colab with NVIDIA K80/T4 GPU acceleration.
+
+2. Kaggle Notebooks for rapid dataset exploration and prototyping.
+
+3. Local machine: Intel Core i7, 16 GB RAM, NVIDIA GTX GPU.
+![Driver Monitoring System Flowchart](reports/figures/flowchat.png)
+
+
+## **Driver Drowsiness Detection**
+
+
+### **Drowsiness Detection Datasets** 
+
+1. **Data Collection**
+**Source & type:**  Collected video frames featuring drivers’ faces, sourced from … (e.g., public datasets, in‑house recordings with webcam or dashcam) @.
+
+**Ground truth:** Each frame labeled as “drowsy” vs. “alert” based on eye aspect ratio (EAR), blink rate, or manual annotation.
+
+**Annotation process:**  Used OpenCV’s landmark detector (or a library like dlib) to locate eyes and estimate labels programmatically/manually.
+
+All datasets were split into training, validation, and test sets in a 70:15:15 ratio. This allowed the models to be trained effectively while minimizing overfitting and providing reliable generalization performance.
+
+2. **Data Preprocessing & Splitting**
+
+**Face/Eye extraction:**  Employed Haar cascades or facial landmark detection to crop regions of interest per frame.
+
+**Normalization:** Converted images to grayscale, resized to fixed dimensions (e.g., 224 × 224), and scaled pixel values to [0,1].
+
+**Train-validation-test split:** Data was divided, for example, into 70% training, 15% validation, and 15% testing sets. This ensured no overlap of individual drivers across splits to prevent data leakage.
+
+### Model Architecture
+
+The system leverages a hybrid CNN-LSTM architecture that captures both spatial and temporal features of driver behavior:
+
+1. **Backbone:**
+
+MobileNetV2 is used as a lightweight and efficient convolutional neural network for extracting spatial features from each face frame.
+
+It is pre-trained on ImageNet to leverage transfer learning.
+
+2. **Temporal Modeling:**
+
+An LSTM (Long Short-Term Memory) layer processes the sequence of spatial features across frames to learn temporal dependencies indicative of drowsiness (e.g., gradual eye closure, yawning patterns).
+
+3. **Classifier:**
+
+A fully connected layer with a sigmoid activation outputs the binary classification: DROWSY or ALERT.
+
+### Model Training: 
+
+1. **Stage 1: Training on YawDD**
+- The model was initially trained on sequences from the YawDD dataset.
+
+- Loss function: Binary Cross-Entropy Loss
+
+- Optimizer: Adam, with a learning rate scheduler.
+
+- Metrics tracked: Accuracy, Precision, Recall, and F1-score.
+
+- Validation set was used to monitor overfitting and apply early stopping.
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃ Layer (type)                    ┃ Output Shape           ┃       Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ time_distributed                │ (None, 30, 7, 7, 1280) │     2,257,984 │
+│ (TimeDistributed)               │                        │               │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ time_distributed_1              │ (None, 30, 1280)       │             0 │
+│ (TimeDistributed)               │                        │               │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ lstm (LSTM)                     │ (None, 64)             │       344,320 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dense (Dense)                   │ (None, 1)              │            65 │
+└─────────────────────────────────┴────────────────────────┴───────────────┘
+
+
+2. **Stage 2: Fine-Tuning on NTHU**
+After initial training, the model was fine-tuned on the NTHU dataset to improve generalization across diverse scenarios.
+
+Only the final few layers of the CNN and the LSTM were unfrozen and retrained.
+
+This transfer learning approach allowed the model to retain base spatial representations while adapting to new domain variations.
+
+
+
+### Model Evaluation
+The model was evaluated using the following strategies:
+
+- Train/Validation/Test Splits were maintained to ensure robustness and generalization.
+
+- Evaluation metrics:
+
+Confusion matrix for analyzing false positives/negatives.
+
+ROC-AUC curves to visualize class separation ability.
+
+Precision-Recall curves to evaluate class imbalance.
+
+Both individual dataset performance and cross-dataset generalization (e.g., trained on YawDD, tested on NTHU) were considered.
+
+### Model Optimization
+
+Several optimization strategies were employed:
+
+1. **Data Augmentation:**  Applied random rotations, flips, brightness changes during training to simulate real-world variability.
+
+2. **Dropout layers and Batch Normalization** were incorporated to reduce overfitting.
+
+3. **Learning rate decay and early stopping**  helped improve convergence and generalization.
+
+Voting mechanism in real-time inference combined deep model output with traditional signal-based analysis (described below) to improve reliability.
+
+## **Driver Attentiveness Detection (Focus vs Distracted)**
+
+
+
+### Datasets Used:
+- **State Farm Distracted Driver Detection Dataset**  
+  A publicly available dataset containing real images of drivers labeled across 10 classes of distraction.  
+  @kopuklu2020driver
+
+- **Custom DAD-style Dataset**  
+  Manually recorded driver videos mimicking real-world distractions, with sequence-wise labels for "Focused" and "Distracted".
+
+---
+
+### Methodology
+
+#### 1. Data Preparation
+- Custom Python scripts were used for preprocessing:
+  - `create_dataset.py`: Extracts frames from videos.
+  - `feature_extractor.py`: Applies **MediaPipe Face Mesh** to extract facial keypoints.
+  - `prepare_sequences.py`: Converts keypoints into sequential data (30-frame sliding windows).
+- The keypoints include facial landmark coordinates such as eye positions, nose tip, and head orientation indicators.
+
+#### 2. Model Architecture
+
+A lightweight Recurrent Neural Network was implemented using a 2-layer **LSTM** model to handle temporal sequence learning.
+
+| Layer          | Type   | Input Shape      | Output Shape     | Description                          |
+|----------------|--------|------------------|------------------|--------------------------------------|
+| Input          | Seq    | (30, 468×3)      | -                | 30 frames of MediaPipe keypoints     |
+| LSTM Layer 1   | LSTM   | (30, 1404)       | (30, 128)        | First LSTM layer with 128 units      |
+| LSTM Layer 2   | LSTM   | (30, 128)        | (128)            | Second LSTM outputs final hidden state|
+| FC Layer       | Linear | (128)            | (1)              | Final output (Focused/Distracted)    |
+| Activation     | Sigmoid| -                | (1)              | For binary classification            |
+
+> **Note**: Input keypoints are flattened per frame before feeding to the LSTM.
+
+#### 3. Training
+- Script: `train.py`
+- Loss Function: `BinaryCrossEntropyLoss`
+- Optimizer: `Adam` with learning rate tuning
+- Model Checkpoint: `model.pth`
+- Evaluation Metrics: Accuracy, Precision, Recall
+- Validation Strategy: 80/20 train-test split on labeled sequences
+
+#### 4. Real-Time Inference
+- Script: `infer.py`
+- A sliding window of 30 recent frames is continuously passed into the trained LSTM model.
+- Prediction is updated every second to indicate whether the driver is **Focused** or **Distracted**.
+
+
+This attentiveness detection module was designed to be both lightweight and robust, making it suitable for integration with other real-time behavioral modules in the system.
+
+
+
+
+## **Driver Expression  Detection**
+
+## Model Architecture
+
+The facial expression detection system is based on **ResNet-18**, a residual neural network architecture introduced by He et al. in 2015. ResNet-18 was chosen due to its ability to mitigate vanishing gradient problems via residual connections and its relatively low computational cost, which makes it suitable for real-time applications like driver emotion monitoring.
+
+Since the goal was to classify facial expressions into seven categories, the final fully connected layer of ResNet-18 was modified accordingly. The base network was pretrained on the ImageNet dataset, and transfer learning was applied to fine-tune it for emotion classification using grayscale facial images.
+
+### Input Processing
+
+- **Input Format**: 48×48 grayscale facial images
+- **Channel Adjustment**: Grayscale converted to 3-channel images (replicated) to match the expected input shape of ResNet-18
+- **Normalization**: Pixel values normalized with mean = 0.5 and standard deviation = 0.5
+
+### Emotion Classes
+
+The model classifies facial expressions into the following 7 categories:
+
+- Angry
+- Disgust
+- Fear
+- Happy
+- Neutral
+- Sad
+- Surprise
+
+### Architecture Table
+
+Below is a simplified 5×3 table outlining the structure of the modified ResNet-18 architecture:
+
+| **Layer**            | **Configuration**                   | **Output Size**      |
+|----------------------|--------------------------------------|----------------------|
+| Input Layer          | 3 × 48 × 48 grayscale image          | 3 × 48 × 48          |
+| Convolution + Pooling| Conv7x7 → BN → ReLU → MaxPool        | 64 × 24 × 24         |
+| Residual Blocks      | 4 Residual Stages (2 blocks each)    | 512 × 1 × 1          |
+| Global Avg Pooling   | AdaptiveAvgPool2d                    | 512                  |
+| Fully Connected (FC) | Linear(512, 7)                       | 7 (emotion classes)  |
+
+The final FC layer outputs a 7-dimensional vector corresponding to the seven facial expressions. The emotion with the highest softmax score is selected as the predicted label.
+
+---
+
+## Model Training
+
+Training was conducted on a labeled facial expression dataset structured using PyTorch’s `ImageFolder` format. Each image belonged to one of the seven emotion categories and was assigned to a corresponding folder.
+
+### Preprocessing Steps
+
+- **Resize**: All images were resized to 48 × 48 pixels
+- **Grayscale**: Converted to grayscale and then replicated to 3 channels
+- **Normalization**: Applied mean = 0.5 and std = 0.5 normalization
+
+### Dataset Splitting
+
+- **Training Set**: 80% of the data
+- **Validation Set**: 20% of the data
+- **Splitting Method**: PyTorch’s `random_split`
+
+### Training Configuration
+
+- **Loss Function**: CrossEntropyLoss
+- **Optimizer**: Adam with learning rate `0.0001`
+- **Learning Rate Scheduler**: ReduceLROnPlateau (monitoring validation accuracy, patience = 3)
+- **Early Stopping**: Triggered if no improvement in validation accuracy for 5 consecutive epochs
+- **Batch Size**: 64
+- **Epochs**: 20 (or until early stopping)
+
+The model was trained using GPU acceleration when available, improving the speed of convergence. Accuracy and loss were logged for each epoch, and the best model (based on validation accuracy) was saved to `best_emotion_model.pth`.
+
+---
+
+## Model Evaluation
+
+Evaluation was performed during and after training to track the performance and prevent overfitting.
+
+### Metrics Used
+
+- **Training and Validation Accuracy**
+- **Training and Validation Loss**
+- **Early Stopping Trigger**: Based on validation accuracy plateau
+
+At runtime, the model's performance is assessed using a real-time emotion prediction system. A webcam (or video feed) is used to capture frames, detect faces using MediaPipe's Face Detection module, and predict the facial emotion using the trained model.
+
+The detected emotion is:
+
+- Overlayed on the video frame in real-time using OpenCV
+- Logged into a temporal buffer (deque) to maintain a history of predictions
+- Plotted using Matplotlib to visualize the driver's emotional state over time
+
+This visualization allows analysts to detect stress, drowsiness, or emotional shifts in drivers across time windows of ~60 seconds.
+
+---
+
+## Model Optimization
+
+To improve model performance and efficiency, several optimization strategies were implemented:
+
+### ✅ Transfer Learning
+
+- A pretrained ResNet-18 model was fine-tuned for the emotion recognition task.
+- The pretrained weights helped in achieving faster convergence and better generalization with limited emotion-labeled data.
+
+### ✅ Learning Rate Scheduling
+
+- `ReduceLROnPlateau` dynamically reduced the learning rate when validation accuracy stopped improving, allowing fine-grained learning in later stages of training.
+
+### ✅ Early Stopping
+
+- Prevented overfitting by halting training after 5 consecutive epochs without improvement in validation accuracy.
+
+### 🚀 Planned Optimizations (Future Work)
+
+- **Data Augmentation**: Adding techniques such as `RandomHorizontalFlip`, `Rotation`, and `ColorJitter` to improve robustness to lighting and pose variations.
+- **Real-Time Smoothing**: Applying majority voting or exponential smoothing to stabilize noisy predictions during live emotion tracking.
+- **Attention Mechanisms**: Exploring spatial or channel attention modules to better localize emotion-relevant facial regions.
+
+---
+
+
+## Final Model Building
+
+## Real-Time Driver Monitoring System Integration
+
+To build a reliable and practical driver monitoring system, we developed a **real-time pipeline** that integrates **three deep learning models**, each targeting a specific aspect of driver behavior:
+
+- **Attentiveness Detection**
+- **Drowsiness Detection**
+- **Microexpression Recognition**
+
+The primary goal was to ensure these models could work **harmoniously** on a **shared video stream**, while maintaining **real-time performance and stability**.
+
+---
+
+### System Overview
+
+- **Input Source**: Live webcam video captured at **30 FPS (frames per second)**
+- **Processing Window**: 30 consecutive frames per second (i.e., 1-second batch)
+- **Pipeline Structure**:
+  - Preprocessing tailored to each model
+  - Per-frame or sequence-based inference
+  - Majority voting for stable predictions
+  - Real-time aggregation of outputs
+
+---
+
+### Attentiveness Detection
+
+- **Input**: 30 frames per second (video stream)
+- **Preprocessing**: 
+  - Face detection using **MediaPipe**
+  - Extraction of **facial landmarks**
+  - Calculation of **directional vectors** (gaze and head pose)
+- **Model**: Custom **LSTM (Long Short-Term Memory)** model
+- **Output**: Binary classification — `Focused` or `Distracted`
+- **Temporal Consistency**: Entire sequence passed to LSTM as input for contextual prediction
+
+---
+
+### Microexpression Recognition
+
+- **Input**: Same 30-frame sequence per second
+- **Preprocessing**:
+  - Frame resizing
+  - Grayscale conversion
+- **Model**: **ResNet-based CNN**
+- **Output**: Emotion class per frame (e.g., Happy, Sad, Angry, etc.)
+- **Stabilization Strategy**: 
+  - **Voting across 30 frames**
+  - Most frequent emotion selected as final output for the second
+
+---
+
+### Drowsiness Detection
+
+- **Input**: Same 30-frame sequence split into 3 sub-sequences (10 frames each)
+- **Model**: TensorFlow-based model for binary classification — `Alert` or `Drowsy`
+- **Voting Strategy**:
+  - Predict on each 10-frame chunk
+  - **Majority voting** across 3 chunks determines final drowsiness label
+- **Additional Heuristic Check**: Eye Aspect Ratio (EAR)
+  - EAR computed from landmarks for each frame
+  - If EAR < threshold for > 1 second → classified as drowsy
+- **Fusion**: Combines both CNN model output and EAR threshold rule
+
+---
+
+### Unified Decision and Output
+
+- Once predictions from all three models are ready:
+  - **Attentiveness Status**
+  - **Dominant Emotion**
+  - **Drowsiness Flag**
+
+- These are combined into a single output, updated **every second**, and displayed or logged.
+
+---
+
+### Key Design Principles
+
+- 🧠 **Modularity**: Each model is independently trained and plugged into the pipeline
+- 🔁 **Synchronization**: All predictions aligned over a 1-second frame window
+- 🗳️ **Voting Mechanisms**: Used in both microexpression and drowsiness modules to ensure prediction stability
+- 👁️ **Multi-modal Cues**: Combines **deep learning** with **physiological features** like EAR for higher accuracy
+
+---
+
+### Applications
+
+The final system is well-suited for:
+
+- In-vehicle dashboards
+- Driver alert systems
+- Real-time monitoring platforms
+
+The modular structure allows easy extension or swapping of components (e.g., different CNN or transformer models), enabling future improvements without disrupting the entire pipeline.
+
+---

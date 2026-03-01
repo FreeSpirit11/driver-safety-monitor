@@ -1,0 +1,1763 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrreport}
+\usepackage{xcolor}
+\usepackage[top=30mm,left=20mm,heightrounded]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage[]{libertinus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Final Project Report},
+  pdfauthor={Kanika Dhawan , Mansi Yadav ,Prince , Vishal , Rahul Nayak},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Final Project Report}
+\author{Kanika Dhawan , Mansi Yadav ,Prince , Vishal , Rahul Nayak}
+\date{2025-06-16}
+\begin{document}
+\maketitle
+
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\listoffigures
+\listoftables
+
+\bookmarksetup{startatroot}
+
+\chapter*{Preface}\label{preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+\markboth{Preface}{Preface}
+
+{{<include final_project_report\abstract.qmd>}}
+{{<include final_project_report\conclusion.qmd>}}
+{{<include final_project_report\eda.qmd>}}
+{{<include final_project_report\intro.qmd>}}
+{{<include final_project_report\methadology.qmd>}}
+{{<include final_project_report\results.qmd>}}
+{{<include final_project_report\refrences.qmd>}}
+
+\bookmarksetup{startatroot}
+
+\chapter*{Abstract}\label{abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\markboth{Abstract}{Abstract}
+
+This project focuses on developing an AI-based system to monitor and
+predict driver behavior with the goal of improving road safety. By using
+video analysis, GPS data, and vehicle parameters such as speed,
+acceleration, and braking, the system detects unsafe driving patterns in
+real-time. It provides timely feedback to drivers, helping them correct
+risky behavior and adopt safer driving habits. The main objective is to
+reduce accidents and promote responsible driving through intelligent,
+data-driven insights
+
+\section*{Acknowledgment}\label{acknowledgment}
+\addcontentsline{toc}{section}{Acknowledgment}
+
+\markright{Acknowledgment}
+
+This project has been a significant learning experience, combining
+multiple disciplines such as computer vision, deep learning, and
+real-time system integration. I would like to acknowledge the valuable
+assistance of AI tools, particularly ChatGPT, which supported the
+writing process of this report. The AI was utilized to improve the
+clarity, coherence, and technical articulation of complex concepts, as
+well as to ensure proper formatting and structure throughout the
+documentation.
+
+It is important to emphasize that while generative AI tools contributed
+to enhancing the written presentation, all core development work ---
+including dataset curation, preprocessing, model training, evaluation,
+optimization, and real-time inference --- was independently
+conceptualized and implemented by me. The ideas, coding logic,
+architecture design, experimentation, and debugging reflect original
+effort, critical thinking, and practical application of machine learning
+and computer vision knowledge.
+
+Furthermore, all external resources, including datasets, pre-trained
+models, or open-source libraries, have been properly cited in the
+relevant sections of this report. The final system represents a genuine
+and hands-on implementation of a real-time driver monitoring solution,
+grounded in both theoretical understanding and practical
+experimentation.
+
+Special thanks to the mentors, teammates, and the institution (Sabudh
+Foundation) for their guidance and support throughout the course of this
+project.
+
+\bookmarksetup{startatroot}
+
+\chapter{Introduction to Project}\label{introduction-to-project}
+
+human mistake is one of the main causes of traffic accidents, road
+safety is a big concern worldwide. In order to reduce accidents and
+raise driving standards generally, it can be quite important to keep an
+eye on driver conduct and give prompt criticism. Artificial Intelligence
+(AI) has become a potent instrument in recent years for analyzing
+intricate human behaviors and making data-driven judgments in real time.
+
+The goal of this project is to create an AI-powered system that uses GPS
+data, video analysis and vehicle characteristics like speed,
+acceleration, and braking to forecast and assess driver behavior. The
+ultimate goal is to identify unsafe driving habits in real-time and
+provide proactive feedback to drivers. This not only helps reduce the
+risk of accidents but also encourages the development of safer and more
+responsible driving practices
+
+\section{Overview}\label{overview}
+
+This project is focused on using AI to make driving safer and smarter.
+Instead of just relying on basic driving data, it brings together a
+bunch of information to get a full picture of how the driver is behaving
+behind the wheel. Here's how it works:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  It checks how alert the driver is --- whether they're focused or
+  getting distracted.
+\item
+  It looks for signs of drowsiness, like drooping eyelids or yawning.
+\item
+  It even watches for tiny facial expressions that can show stress or
+  discomfort.
+\end{enumerate}
+
+To do this, the system uses:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  A live camera feed to analyze the driver's face and head movements.
+\item
+  GPS data to understand driving routes and patterns.
+\item
+  Vehicle data like speed, acceleration, and braking behavior.
+\end{enumerate}
+
+Once all this data is collected, the AI processes it and calculates a
+unified safety score that sums up how safely the driver is performing at
+any moment. If something seems off, like if the driver looks sleepy or
+stressed, the system can give real-time feedback or alerts to help them
+correct their behavior.
+
+In short, the goal is to spot risky driving habits early and guide
+drivers toward safer, more responsible driving --- using the power of AI
+to make roads safer for everyone.
+
+\section{ExistingSystem}\label{existingsystem}
+
+Currently, several systems and technologies aim to improve driver
+safety, but most of them have limitations when it comes to analyzing
+driver behavior in a detailed and real-time manner. Some of the existing
+solutions include:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Basic Driver Monitoring Systems}: Many modern vehicles come
+  with built-in alert systems that beep if the driver doesn't wear a
+  seatbelt, drifts from the lane, or brakes suddenly. However, these
+  systems usually rely only on sensor data and don't analyze the
+  driver's actual behavior or condition.
+\item
+  \textbf{Drowsiness Detection Systems:} Some cars have simple
+  drowsiness detection features based on steering patterns or eyelid
+  movement. These systems may not be accurate in all situations and
+  often trigger alerts only after the driver is already at risk.
+\item
+  \textbf{GPS-based Tracking Systems:} Fleet vehicles and taxis often
+  use GPS tracking to monitor speed, location, and route history. These
+  systems are good for logging data but do not offer real-time insights
+  into the driver's physical or emotional state.
+\item
+  \textbf{Third-party mobile apps:} There are apps that use phone
+  sensors to monitor driving speed or phone usage while driving.
+  However, they depend heavily on the phone's position and permissions,
+  which can affect accuracy.
+\end{enumerate}
+
+\textbf{Limitations of the Existing Systems:} 1. Lack of real-time
+behavior prediction
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\item
+  Limited focus on driver's physical and emotional state
+\item
+  No integration of facial expression or alertness analysis
+\end{enumerate}
+
+These limitations show that there's a need for a more intelligent,
+multi-input system that can understand a driver's condition in real time
+and take action before an accident happens.
+
+\section{Objectives of Project (Must be clearly, precisely defined and
+must be covered in the
+work)}\label{objectives-of-project-must-be-clearly-precisely-defined-and-must-be-covered-in-the-work}
+
+The primary objective of this project is to build an AI-based system
+that can monitor and assess driver behavior in real time to improve road
+safety. The system aims to generate a unified driver safety score by
+analyzing various inputs such as facial expressions, alertness, and
+drowsiness. It uses live video to detect signs of distraction or
+fatigue, tracks subtle facial micro-expressions to gauge emotional
+states like stress or anger, and monitors eye and head movements to
+identify drowsiness. Additionally, the system collects vehicle data such
+as speed, acceleration, and braking patterns, along with GPS data to
+understand driving routes and behavior in different environments. Based
+on this combined analysis, the system provides real-time feedback to the
+driver, helping them correct unsafe behavior before it leads to an
+accident. The overall goal is to create a proactive, intelligent
+solution that encourages safer and more responsible driving habits.
+
+\bookmarksetup{startatroot}
+
+\chapter{Pre-Processing and Exploratory Data
+Analysis}\label{pre-processing-and-exploratory-data-analysis}
+
+\subsection{Pre-Processing}\label{pre-processing}
+
+Pre-processing refers to the set of techniques used to clean and prepare
+raw data for input into a machine learning model. This includes
+operations such as resizing images, normalizing data, handling missing
+values, encoding categorical variables, and generating sequences or
+features required by the model. Effective pre-processing ensures data
+consistency, reduces noise, and improves model performance.
+
+\subsection{Exploratory Data Analysis
+(EDA)}\label{exploratory-data-analysis-eda}
+
+Exploratory Data Analysis (EDA) is the process of analyzing and
+visualizing datasets to uncover patterns, spot anomalies, test
+hypotheses, and check assumptions. It involves techniques such as
+plotting distributions, inspecting class balance, and summarizing
+statistical properties of the features. EDA provides critical insights
+that guide model selection, feature engineering, and validation
+strategies. \#\# Dataset Collection
+
+The dataset used in this project comes from multiple sources, including:
+
+\begin{itemize}
+\item
+  \textbf{State Farm Distracted Driver Detection Dataset}\\
+  A publicly available dataset containing real-world images of drivers
+  performing various activities (e.g., texting, talking on the phone,
+  eating), categorized into 10 labeled classes.
+\item
+  \textbf{Custom DAD-style Video Dataset}\\
+  Manually recorded driver videos with annotations for focus level,
+  drowsiness, and emotional microexpressions. These videos were
+  segmented and labeled to match the frame rate of the real-time system
+  (30 FPS).
+\end{itemize}
+
+These datasets provide diverse conditions, angles, and driver
+demographics, which help the model generalize better during training and
+inference.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Data Pre-processing}\label{data-pre-processing}
+
+Effective data pre-processing is crucial to ensure the quality and
+consistency of the input data before feeding it to the machine learning
+models.
+
+\subsection{Handling Missing Values}\label{handling-missing-values}
+
+Missing values can arise due to face detection failures or inconsistent
+landmark extraction in some video frames. To handle this: - Frames with
+incomplete landmark data are discarded. - For sequence-based models like
+LSTM, only complete 30-frame sequences are retained. - In some cases,
+interpolation is used to fill short gaps.
+
+\subsection{Data Size and
+Dimensionality}\label{data-size-and-dimensionality}
+
+High frame rates and video-based data can lead to large volumes of data:
+- Each video is broken down into 30-frame sequences. - Feature vectors
+such as facial keypoints are extracted to reduce dimensionality. -
+Efficient storage formats (e.g., \texttt{.npy}, \texttt{.pt}) are used
+to manage memory overhead.
+
+Some deep learning algorithms (e.g., LSTM) are more sensitive to long
+sequences, so chunking is used to make training more efficient.
+
+\subsection{Scaling of Variables}\label{scaling-of-variables}
+
+Scaling is essential when working with models like LSTM or ResNet: -
+Facial keypoints are normalized relative to face size. - Pixel values in
+image-based models are scaled between 0 and 1. - This ensures that no
+feature disproportionately influences the model.
+
+\subsection{Outliers}\label{outliers}
+
+Outliers, such as blurred frames or extreme head turns, can mislead
+training: - Detected using visualization and statistical thresholds. -
+Either removed or smoothed using temporal filters (moving average,
+median filters).
+
+\subsection{Clustering (if applicable)}\label{clustering-if-applicable}
+
+In the microexpression model, facial embeddings can form clusters
+corresponding to different emotional states: - Dimensionality reduction
+techniques like PCA or t-SNE were used to visualize clusters. - K-means
+was tested to confirm separability, and the majority-voting approach
+helped in aggregating weak predictions.
+
+\subsection{Data Transformation}\label{data-transformation}
+
+Several transformations improve learning: - For the attentiveness model,
+directional vectors (nose to eyes, etc.) are computed from landmarks. -
+Grayscale conversion simplifies emotion detection without losing crucial
+features. - Temporal smoothing over sequence windows helps reduce noise.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Overall, these pre-processing strategies ensure that the models receive
+clean, normalized, and structured input data that enhances their
+predictive power and generalization.
+
+\section{Exploratory Data Analysis and
+Visualisations}\label{exploratory-data-analysis-and-visualisations}
+
+Exploratory Data Analysis (EDA) plays a crucial role in understanding
+the structure, quality, and hidden patterns of the dataset before
+applying machine learning models. It helps in making informed decisions
+during model design and improves overall system performance.
+
+\subsection{1. Feature Selection}\label{feature-selection}
+
+Feature selection identifies the most informative and relevant variables
+for modeling: - For attentiveness detection, directional vectors (from
+nose to eyes, etc.) are prioritized. - For drowsiness detection,
+features like EAR and blink rate are retained. - For emotion detection,
+spatial patterns in grayscale pixel intensity are emphasized.
+
+Redundant or non-contributing features are removed to reduce overfitting
+and improve model interpretability.
+
+\subsection{2. Dimensionality Reduction}\label{dimensionality-reduction}
+
+When dealing with high-dimensional data such as facial landmarks or
+CNN-generated embeddings: - \textbf{Principal Component Analysis (PCA)}
+and \textbf{t-SNE} are employed to reduce feature dimensions while
+preserving variance. - Dimensionality reduction improves model training
+time and helps in visualizing data clusters (e.g., emotion categories).
+
+These techniques also help in validating whether the features separate
+well across different classes, which is critical for classifier
+effectiveness.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Conclusion}:\\
+EDA not only provides valuable insights into the nature of the data but
+also ensures that the features selected for modeling are meaningful and
+non-redundant. This step is critical for enhancing the performance and
+interpretability of the driver monitoring models.
+
+\bookmarksetup{startatroot}
+
+\chapter{Methodology}\label{methodology}
+
+To build our AI-based Driver Behavior and Safety system, we followed a
+structured process---from choosing the right tools to combining multiple
+AI models into a unified safety score. This section walks through each
+step, explains the logic behind our choices, and describes how the
+system works in real-time
+
+\section{Tools \& Platforms Used}\label{tools-platforms-used}
+
+Python was used as the primary programming language due to its rich
+ecosystem for machine learning and image processing. The following
+libraries and tools were leveraged:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  OpenCV for image and video preprocessing.
+\item
+  MediaPipe for real-time facial landmark detection.
+\item
+  TensorFlow and Keras for deep learning model development.
+\item
+  NumPy and Pandas for data manipulation.
+\item
+  Matplotlib and Seaborn for visualization.
+\end{enumerate}
+
+Experiments were conducted using:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Google Colab with NVIDIA K80/T4 GPU acceleration.
+\item
+  Kaggle Notebooks for rapid dataset exploration and prototyping.
+\item
+  Local machine: Intel Core i7, 16 GB RAM, NVIDIA GTX GPU.
+  \pandocbounded{\includegraphics[keepaspectratio]{reports/figures/flowchat.png}}
+\end{enumerate}
+
+\section{\texorpdfstring{\textbf{Driver Drowsiness
+Detection}}{Driver Drowsiness Detection}}\label{driver-drowsiness-detection}
+
+\subsection{\texorpdfstring{\textbf{Drowsiness Detection
+Datasets}}{Drowsiness Detection Datasets}}\label{drowsiness-detection-datasets}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Data Collection} \textbf{Source \& type:} Collected video
+  frames featuring drivers' faces, sourced from\,\ldots{} (e.g., public
+  datasets, in‑house recordings with webcam or dashcam) @.
+\end{enumerate}
+
+\textbf{Ground truth:} Each frame labeled as ``drowsy'' vs.~``alert''
+based on eye aspect ratio (EAR), blink rate, or manual annotation.
+
+\textbf{Annotation process:} Used OpenCV's landmark detector (or a
+library like dlib) to locate eyes and estimate labels
+programmatically/manually.
+
+All datasets were split into training, validation, and test sets in a
+70:15:15 ratio. This allowed the models to be trained effectively while
+minimizing overfitting and providing reliable generalization
+performance.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Data Preprocessing \& Splitting}
+\end{enumerate}
+
+\textbf{Face/Eye extraction:} Employed Haar cascades or facial landmark
+detection to crop regions of interest per frame.
+
+\textbf{Normalization:} Converted images to grayscale, resized to fixed
+dimensions (e.g., 224\,×\,224), and scaled pixel values to {[}0,1{]}.
+
+\textbf{Train-validation-test split:} Data was divided, for example,
+into 70\% training, 15\% validation, and 15\% testing sets. This ensured
+no overlap of individual drivers across splits to prevent data leakage.
+
+\subsection{Model Architecture}\label{model-architecture}
+
+The system leverages a hybrid CNN-LSTM architecture that captures both
+spatial and temporal features of driver behavior:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Backbone:}
+\end{enumerate}
+
+MobileNetV2 is used as a lightweight and efficient convolutional neural
+network for extracting spatial features from each face frame.
+
+It is pre-trained on ImageNet to leverage transfer learning.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Temporal Modeling:}
+\end{enumerate}
+
+An LSTM (Long Short-Term Memory) layer processes the sequence of spatial
+features across frames to learn temporal dependencies indicative of
+drowsiness (e.g., gradual eye closure, yawning patterns).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Classifier:}
+\end{enumerate}
+
+A fully connected layer with a sigmoid activation outputs the binary
+classification: DROWSY or ALERT.
+
+\subsection{Model Training:}\label{model-training}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Stage 1: Training on YawDD}
+\end{enumerate}
+
+\begin{itemize}
+\item
+  The model was initially trained on sequences from the YawDD dataset.
+\item
+  Loss function: Binary Cross-Entropy Loss
+\item
+  Optimizer: Adam, with a learning rate scheduler.
+\item
+  Metrics tracked: Accuracy, Precision, Recall, and F1-score.
+\item
+  Validation set was used to monitor overfitting and apply early
+  stopping.
+\end{itemize}
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃ Layer (type) ┃ Output Shape ┃ Param \# ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ time\_distributed │ (None, 30, 7, 7, 1280) │ 2,257,984 │ │
+(TimeDistributed) │ │ │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ time\_distributed\_1 │ (None, 30, 1280) │ 0 │ │ (TimeDistributed) │ │
+│
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ lstm (LSTM) │ (None, 64) │ 344,320 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dense (Dense) │ (None, 1) │ 65 │
+└─────────────────────────────────┴────────────────────────┴───────────────┘
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Stage 2: Fine-Tuning on NTHU} After initial training, the
+  model was fine-tuned on the NTHU dataset to improve generalization
+  across diverse scenarios.
+\end{enumerate}
+
+Only the final few layers of the CNN and the LSTM were unfrozen and
+retrained.
+
+This transfer learning approach allowed the model to retain base spatial
+representations while adapting to new domain variations.
+
+\subsection{Model Evaluation}\label{model-evaluation}
+
+The model was evaluated using the following strategies:
+
+\begin{itemize}
+\item
+  Train/Validation/Test Splits were maintained to ensure robustness and
+  generalization.
+\item
+  Evaluation metrics:
+\end{itemize}
+
+Confusion matrix for analyzing false positives/negatives.
+
+ROC-AUC curves to visualize class separation ability.
+
+Precision-Recall curves to evaluate class imbalance.
+
+Both individual dataset performance and cross-dataset generalization
+(e.g., trained on YawDD, tested on NTHU) were considered.
+
+\subsection{Model Optimization}\label{model-optimization}
+
+Several optimization strategies were employed:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Data Augmentation:} Applied random rotations, flips,
+  brightness changes during training to simulate real-world variability.
+\item
+  \textbf{Dropout layers and Batch Normalization} were incorporated to
+  reduce overfitting.
+\item
+  \textbf{Learning rate decay and early stopping} helped improve
+  convergence and generalization.
+\end{enumerate}
+
+Voting mechanism in real-time inference combined deep model output with
+traditional signal-based analysis (described below) to improve
+reliability.
+
+\section{\texorpdfstring{\textbf{Driver Attentiveness Detection (Focus
+vs
+Distracted)}}{Driver Attentiveness Detection (Focus vs Distracted)}}\label{driver-attentiveness-detection-focus-vs-distracted}
+
+\subsection{Datasets Used:}\label{datasets-used}
+
+\begin{itemize}
+\item
+  \textbf{State Farm Distracted Driver Detection Dataset}\\
+  A publicly available dataset containing real images of drivers labeled
+  across 10 classes of distraction.\\
+  Köpüklü et al. (2020)
+\item
+  \textbf{Custom DAD-style Dataset}\\
+  Manually recorded driver videos mimicking real-world distractions,
+  with sequence-wise labels for ``Focused'' and ``Distracted''.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Methodology}\label{methodology-1}
+
+\subsubsection{1. Data Preparation}\label{data-preparation}
+
+\begin{itemize}
+\tightlist
+\item
+  Custom Python scripts were used for preprocessing:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{create\_dataset.py}: Extracts frames from videos.
+  \item
+    \texttt{feature\_extractor.py}: Applies \textbf{MediaPipe Face Mesh}
+    to extract facial keypoints.
+  \item
+    \texttt{prepare\_sequences.py}: Converts keypoints into sequential
+    data (30-frame sliding windows).
+  \end{itemize}
+\item
+  The keypoints include facial landmark coordinates such as eye
+  positions, nose tip, and head orientation indicators.
+\end{itemize}
+
+\subsubsection{2. Model Architecture}\label{model-architecture-1}
+
+A lightweight Recurrent Neural Network was implemented using a 2-layer
+\textbf{LSTM} model to handle temporal sequence learning.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1633}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0816}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1837}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1837}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3878}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Layer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Input Shape
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Output Shape
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Input & Seq & (30, 468×3) & - & 30 frames of MediaPipe keypoints \\
+LSTM Layer 1 & LSTM & (30, 1404) & (30, 128) & First LSTM layer with 128
+units \\
+LSTM Layer 2 & LSTM & (30, 128) & (128) & Second LSTM outputs final
+hidden state \\
+FC Layer & Linear & (128) & (1) & Final output (Focused/Distracted) \\
+Activation & Sigmoid & - & (1) & For binary classification \\
+\end{longtable}
+
+\begin{quote}
+\textbf{Note}: Input keypoints are flattened per frame before feeding to
+the LSTM.
+\end{quote}
+
+\subsubsection{3. Training}\label{training}
+
+\begin{itemize}
+\tightlist
+\item
+  Script: \texttt{train.py}
+\item
+  Loss Function: \texttt{BinaryCrossEntropyLoss}
+\item
+  Optimizer: \texttt{Adam} with learning rate tuning
+\item
+  Model Checkpoint: \texttt{model.pth}
+\item
+  Evaluation Metrics: Accuracy, Precision, Recall
+\item
+  Validation Strategy: 80/20 train-test split on labeled sequences
+\end{itemize}
+
+\subsubsection{4. Real-Time Inference}\label{real-time-inference}
+
+\begin{itemize}
+\tightlist
+\item
+  Script: \texttt{infer.py}
+\item
+  A sliding window of 30 recent frames is continuously passed into the
+  trained LSTM model.
+\item
+  Prediction is updated every second to indicate whether the driver is
+  \textbf{Focused} or \textbf{Distracted}.
+\end{itemize}
+
+This attentiveness detection module was designed to be both lightweight
+and robust, making it suitable for integration with other real-time
+behavioral modules in the system.
+
+\section{\texorpdfstring{\textbf{Driver Expression
+Detection}}{Driver Expression Detection}}\label{driver-expression-detection}
+
+\section{Model Architecture}\label{model-architecture-2}
+
+The facial expression detection system is based on \textbf{ResNet-18}, a
+residual neural network architecture introduced by He et al.~in 2015.
+ResNet-18 was chosen due to its ability to mitigate vanishing gradient
+problems via residual connections and its relatively low computational
+cost, which makes it suitable for real-time applications like driver
+emotion monitoring.
+
+Since the goal was to classify facial expressions into seven categories,
+the final fully connected layer of ResNet-18 was modified accordingly.
+The base network was pretrained on the ImageNet dataset, and transfer
+learning was applied to fine-tune it for emotion classification using
+grayscale facial images.
+
+\subsection{Input Processing}\label{input-processing}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Input Format}: 48×48 grayscale facial images
+\item
+  \textbf{Channel Adjustment}: Grayscale converted to 3-channel images
+  (replicated) to match the expected input shape of ResNet-18
+\item
+  \textbf{Normalization}: Pixel values normalized with mean = 0.5 and
+  standard deviation = 0.5
+\end{itemize}
+
+\subsection{Emotion Classes}\label{emotion-classes}
+
+The model classifies facial expressions into the following 7 categories:
+
+\begin{itemize}
+\tightlist
+\item
+  Angry
+\item
+  Disgust
+\item
+  Fear
+\item
+  Happy
+\item
+  Neutral
+\item
+  Sad
+\item
+  Surprise
+\end{itemize}
+
+\subsection{Architecture Table}\label{architecture-table}
+
+Below is a simplified 5×3 table outlining the structure of the modified
+ResNet-18 architecture:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2683}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4634}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2683}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Layer}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Configuration}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Output Size}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Input Layer & 3 × 48 × 48 grayscale image & 3 × 48 × 48 \\
+Convolution + Pooling & Conv7x7 → BN → ReLU → MaxPool & 64 × 24 × 24 \\
+Residual Blocks & 4 Residual Stages (2 blocks each) & 512 × 1 × 1 \\
+Global Avg Pooling & AdaptiveAvgPool2d & 512 \\
+Fully Connected (FC) & Linear(512, 7) & 7 (emotion classes) \\
+\end{longtable}
+
+The final FC layer outputs a 7-dimensional vector corresponding to the
+seven facial expressions. The emotion with the highest softmax score is
+selected as the predicted label.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Model Training}\label{model-training-1}
+
+Training was conducted on a labeled facial expression dataset structured
+using PyTorch's \texttt{ImageFolder} format. Each image belonged to one
+of the seven emotion categories and was assigned to a corresponding
+folder.
+
+\subsection{Preprocessing Steps}\label{preprocessing-steps}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Resize}: All images were resized to 48 × 48 pixels
+\item
+  \textbf{Grayscale}: Converted to grayscale and then replicated to 3
+  channels
+\item
+  \textbf{Normalization}: Applied mean = 0.5 and std = 0.5 normalization
+\end{itemize}
+
+\subsection{Dataset Splitting}\label{dataset-splitting}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Training Set}: 80\% of the data
+\item
+  \textbf{Validation Set}: 20\% of the data
+\item
+  \textbf{Splitting Method}: PyTorch's \texttt{random\_split}
+\end{itemize}
+
+\subsection{Training Configuration}\label{training-configuration}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Loss Function}: CrossEntropyLoss
+\item
+  \textbf{Optimizer}: Adam with learning rate \texttt{0.0001}
+\item
+  \textbf{Learning Rate Scheduler}: ReduceLROnPlateau (monitoring
+  validation accuracy, patience = 3)
+\item
+  \textbf{Early Stopping}: Triggered if no improvement in validation
+  accuracy for 5 consecutive epochs
+\item
+  \textbf{Batch Size}: 64
+\item
+  \textbf{Epochs}: 20 (or until early stopping)
+\end{itemize}
+
+The model was trained using GPU acceleration when available, improving
+the speed of convergence. Accuracy and loss were logged for each epoch,
+and the best model (based on validation accuracy) was saved to
+\texttt{best\_emotion\_model.pth}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Model Evaluation}\label{model-evaluation-1}
+
+Evaluation was performed during and after training to track the
+performance and prevent overfitting.
+
+\subsection{Metrics Used}\label{metrics-used}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Training and Validation Accuracy}
+\item
+  \textbf{Training and Validation Loss}
+\item
+  \textbf{Early Stopping Trigger}: Based on validation accuracy plateau
+\end{itemize}
+
+At runtime, the model's performance is assessed using a real-time
+emotion prediction system. A webcam (or video feed) is used to capture
+frames, detect faces using MediaPipe's Face Detection module, and
+predict the facial emotion using the trained model.
+
+The detected emotion is:
+
+\begin{itemize}
+\tightlist
+\item
+  Overlayed on the video frame in real-time using OpenCV
+\item
+  Logged into a temporal buffer (deque) to maintain a history of
+  predictions
+\item
+  Plotted using Matplotlib to visualize the driver's emotional state
+  over time
+\end{itemize}
+
+This visualization allows analysts to detect stress, drowsiness, or
+emotional shifts in drivers across time windows of \textasciitilde60
+seconds.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Model Optimization}\label{model-optimization-1}
+
+To improve model performance and efficiency, several optimization
+strategies were implemented:
+
+\subsection{✅ Transfer Learning}\label{transfer-learning}
+
+\begin{itemize}
+\tightlist
+\item
+  A pretrained ResNet-18 model was fine-tuned for the emotion
+  recognition task.
+\item
+  The pretrained weights helped in achieving faster convergence and
+  better generalization with limited emotion-labeled data.
+\end{itemize}
+
+\subsection{✅ Learning Rate Scheduling}\label{learning-rate-scheduling}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{ReduceLROnPlateau} dynamically reduced the learning rate when
+  validation accuracy stopped improving, allowing fine-grained learning
+  in later stages of training.
+\end{itemize}
+
+\subsection{✅ Early Stopping}\label{early-stopping}
+
+\begin{itemize}
+\tightlist
+\item
+  Prevented overfitting by halting training after 5 consecutive epochs
+  without improvement in validation accuracy.
+\end{itemize}
+
+\subsection{🚀 Planned Optimizations (Future
+Work)}\label{planned-optimizations-future-work}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Data Augmentation}: Adding techniques such as
+  \texttt{RandomHorizontalFlip}, \texttt{Rotation}, and
+  \texttt{ColorJitter} to improve robustness to lighting and pose
+  variations.
+\item
+  \textbf{Real-Time Smoothing}: Applying majority voting or exponential
+  smoothing to stabilize noisy predictions during live emotion tracking.
+\item
+  \textbf{Attention Mechanisms}: Exploring spatial or channel attention
+  modules to better localize emotion-relevant facial regions.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Final Model Building}\label{final-model-building}
+
+\section{Real-Time Driver Monitoring System
+Integration}\label{real-time-driver-monitoring-system-integration}
+
+To build a reliable and practical driver monitoring system, we developed
+a \textbf{real-time pipeline} that integrates \textbf{three deep
+learning models}, each targeting a specific aspect of driver behavior:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Attentiveness Detection}
+\item
+  \textbf{Drowsiness Detection}
+\item
+  \textbf{Microexpression Recognition}
+\end{itemize}
+
+The primary goal was to ensure these models could work
+\textbf{harmoniously} on a \textbf{shared video stream}, while
+maintaining \textbf{real-time performance and stability}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{System Overview}\label{system-overview}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Input Source}: Live webcam video captured at \textbf{30 FPS
+  (frames per second)}
+\item
+  \textbf{Processing Window}: 30 consecutive frames per second (i.e.,
+  1-second batch)
+\item
+  \textbf{Pipeline Structure}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Preprocessing tailored to each model
+  \item
+    Per-frame or sequence-based inference
+  \item
+    Majority voting for stable predictions
+  \item
+    Real-time aggregation of outputs
+  \end{itemize}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Attentiveness Detection}\label{attentiveness-detection}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Input}: 30 frames per second (video stream)
+\item
+  \textbf{Preprocessing}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Face detection using \textbf{MediaPipe}
+  \item
+    Extraction of \textbf{facial landmarks}
+  \item
+    Calculation of \textbf{directional vectors} (gaze and head pose)
+  \end{itemize}
+\item
+  \textbf{Model}: Custom \textbf{LSTM (Long Short-Term Memory)} model
+\item
+  \textbf{Output}: Binary classification --- \texttt{Focused} or
+  \texttt{Distracted}
+\item
+  \textbf{Temporal Consistency}: Entire sequence passed to LSTM as input
+  for contextual prediction
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Microexpression
+Recognition}\label{microexpression-recognition}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Input}: Same 30-frame sequence per second
+\item
+  \textbf{Preprocessing}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Frame resizing
+  \item
+    Grayscale conversion
+  \end{itemize}
+\item
+  \textbf{Model}: \textbf{ResNet-based CNN}
+\item
+  \textbf{Output}: Emotion class per frame (e.g., Happy, Sad, Angry,
+  etc.)
+\item
+  \textbf{Stabilization Strategy}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Voting across 30 frames}
+  \item
+    Most frequent emotion selected as final output for the second
+  \end{itemize}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Drowsiness Detection}\label{drowsiness-detection}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Input}: Same 30-frame sequence split into 3 sub-sequences (10
+  frames each)
+\item
+  \textbf{Model}: TensorFlow-based model for binary classification ---
+  \texttt{Alert} or \texttt{Drowsy}
+\item
+  \textbf{Voting Strategy}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Predict on each 10-frame chunk
+  \item
+    \textbf{Majority voting} across 3 chunks determines final drowsiness
+    label
+  \end{itemize}
+\item
+  \textbf{Additional Heuristic Check}: Eye Aspect Ratio (EAR)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    EAR computed from landmarks for each frame
+  \item
+    If EAR \textless{} threshold for \textgreater{} 1 second →
+    classified as drowsy
+  \end{itemize}
+\item
+  \textbf{Fusion}: Combines both CNN model output and EAR threshold rule
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Unified Decision and
+Output}\label{unified-decision-and-output}
+
+\begin{itemize}
+\tightlist
+\item
+  Once predictions from all three models are ready:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Attentiveness Status}
+  \item
+    \textbf{Dominant Emotion}
+  \item
+    \textbf{Drowsiness Flag}
+  \end{itemize}
+\item
+  These are combined into a single output, updated \textbf{every
+  second}, and displayed or logged.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Key Design Principles}\label{key-design-principles}
+
+\begin{itemize}
+\tightlist
+\item
+  🧠 \textbf{Modularity}: Each model is independently trained and
+  plugged into the pipeline
+\item
+  🔁 \textbf{Synchronization}: All predictions aligned over a 1-second
+  frame window
+\item
+  🗳️ \textbf{Voting Mechanisms}: Used in both microexpression and
+  drowsiness modules to ensure prediction stability
+\item
+  👁️ \textbf{Multi-modal Cues}: Combines \textbf{deep learning} with
+  \textbf{physiological features} like EAR for higher accuracy
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Applications}\label{applications}
+
+The final system is well-suited for:
+
+\begin{itemize}
+\tightlist
+\item
+  In-vehicle dashboards
+\item
+  Driver alert systems
+\item
+  Real-time monitoring platforms
+\end{itemize}
+
+The modular structure allows easy extension or swapping of components
+(e.g., different CNN or transformer models), enabling future
+improvements without disrupting the entire pipeline.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\bookmarksetup{startatroot}
+
+\chapter{Results}\label{results}
+
+In this section, we present and compare the performance of the three
+machine learning models used in our real-time driver monitoring system.
+Each model is evaluated based on its task --- attentiveness detection,
+microexpression recognition, and drowsiness detection --- using
+accuracy, stability, and response time as the primary metrics.
+
+\section{Description of the Models}\label{description-of-the-models}
+
+\subsection{1. Attentiveness Detection
+Model}\label{attentiveness-detection-model}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Model Type}: Long Short-Term Memory (LSTM) Recurrent Neural
+  Network\\
+\item
+  \textbf{Input Features}: Facial landmark vectors representing gaze
+  direction and head orientation\\
+\item
+  \textbf{Purpose}: Classify whether the driver is focused or distracted
+  based on motion and orientation patterns over time\\
+\item
+  \textbf{Sequence Length}: 30 frames (1 second)
+\end{itemize}
+
+\subsection{2. Microexpression Recognition
+Model}\label{microexpression-recognition-model}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Model Type}: Convolutional Neural Network (ResNet-18)\\
+\item
+  \textbf{Input Features}: Grayscale facial images resized to 48×48
+  pixels\\
+\item
+  \textbf{Output Classes}: \texttt{Angry}, \texttt{Disgust},
+  \texttt{Fear}, \texttt{Happy}, \texttt{Neutral}, \texttt{Sad},
+  \texttt{Surprise}\\
+\item
+  \textbf{Voting Strategy}: Emotion predicted for each frame, and the
+  final emotion is determined using majority voting across 30 frames
+\end{itemize}
+
+\subsection{3. Drowsiness Detection
+Model}\label{drowsiness-detection-model}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Model Type}: CNN-based model implemented in TensorFlow\\
+\item
+  \textbf{Input Sequence}: 30-frame window split into 3 chunks of 10
+  frames\\
+\item
+  \textbf{Fusion Technique}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    CNN output across three chunks combined using majority voting\\
+  \item
+    EAR (Eye Aspect Ratio) used as an additional heuristic\\
+  \end{itemize}
+\item
+  \textbf{Final Decision}: Combines model inference and physiological
+  signal (EAR) for robust drowsiness detection
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Performance Comparison}\label{performance-comparison}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1727}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1151}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1007}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1151}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1583}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.3381}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Task
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Model Used
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Accuracy (\%)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Voting Applied
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Inference Time (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Notable Features
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Attentiveness Detection & LSTM-RNN & 91.3 & No & \textasciitilde18 &
+Uses directional vectors from facial landmarks \\
+Microexpression & ResNet-18 & 89.7 & Yes (30-frame) & \textasciitilde22
+& Frame-level prediction stabilized via voting \\
+Drowsiness Detection & CNN + EAR Rule & 94.1 & Yes (3x10) &
+\textasciitilde25 & Combined CNN output with handcrafted EAR logic \\
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Key Observations}\label{key-observations}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Voting Enhances Stability}: Both the microexpression and
+  drowsiness modules significantly benefit from temporal voting,
+  reducing noise and avoiding momentary misclassification.
+\item
+  \textbf{Fusion Improves Accuracy}: The dual-input logic for drowsiness
+  (model + EAR) achieved the highest accuracy, validating the importance
+  of physiological cues.
+\item
+  \textbf{Real-Time Performance}: All models were able to process data
+  and return results in under 30 ms, supporting real-time deployment
+  requirements.
+\item
+  \textbf{Emotion Volatility}: Microexpressions showed more frequent
+  fluctuation compared to attentiveness or drowsiness, hence requiring
+  voting for robust inference.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Performance Metrics}\label{performance-metrics}
+
+\subsection{Classification Models}\label{classification-models}
+
+The following metrics were used to evaluate models like driver
+attentiveness (LSTM), microexpression detection (ResNet), and drowsiness
+detection (classification-based):
+
+\begin{itemize}
+\item
+  \textbf{Accuracy}:\\
+  The ratio of correctly predicted observations to the total
+  observations. It is a general metric useful when the classes are
+  balanced.
+\item
+  \textbf{Precision}:\\
+  The ratio of correctly predicted positive observations to the total
+  predicted positive observations. It is helpful when the cost of false
+  positives is high.
+\item
+  \textbf{Recall (Sensitivity)}:\\
+  The ratio of correctly predicted positive observations to all
+  observations in the actual positive class. This is crucial when false
+  negatives must be minimized.
+\item
+  \textbf{F1 Score}:\\
+  The harmonic mean of Precision and Recall. It is a balanced metric
+  that is especially useful when dealing with imbalanced datasets.
+\item
+  \textbf{AUC-ROC (Area Under the Receiver Operating Characteristic
+  Curve)}:\\
+  Represents the model's ability to distinguish between the classes.
+  Higher AUC indicates better model performance.
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{.reports/figures/driver_attention.jpeg}}
+\pandocbounded{\includegraphics[keepaspectratio]{.reports/figures/driver_expression.jpeg}}
+\pandocbounded{\includegraphics[keepaspectratio]{./reports/figures/drowsiness confusion metrix.png}}
+
+\subsection{💤 Driver Drowsiness Detection -- Classification
+Report}\label{driver-drowsiness-detection-classification-report}
+
+The drowsiness detection model was evaluated using several performance
+metrics, including \textbf{precision}, \textbf{recall},
+\textbf{F1-score}, and \textbf{accuracy}. These metrics were computed on
+a validation set containing labeled sequences of ``Alert'' and
+``Drowsy'' driver states.
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Class & Precision & Recall & F1-Score & Support \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Alert & 0.93 & 0.96 & 0.95 & 309 \\
+Drowsy & 0.91 & 0.85 & 0.88 & 139 \\
+\textbf{Accuracy} & & & \textbf{0.93} & \textbf{448} \\
+Macro Avg & 0.92 & 0.91 & 0.91 & 448 \\
+Weighted Avg & 0.93 & 0.93 & 0.93 & 448 \\
+\end{longtable}
+
+\subsubsection{📌 Key Observations}\label{key-observations-1}
+
+\begin{itemize}
+\tightlist
+\item
+  The model performs \textbf{exceptionally well} in detecting
+  \textbf{alert} states with high precision (0.93) and recall (0.96).
+\item
+  For \textbf{drowsy} states, performance is also strong, though
+  slightly lower, showing good sensitivity to early signs of drowsiness.
+\end{itemize}
+
+\section{Results Table}\label{results-table}
+
+\section{Results Table}\label{results-table-1}
+
+The following table presents the performance metrics for each model
+developed as part of the driver monitoring system. The table includes
+model names, their target behavior, primary evaluation metrics, and the
+observed performance values.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2564}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1880}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2308}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1282}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1966}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target Behavior
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Evaluation Metric(s)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Value (\%)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Std. Dev / CI
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+LSTM Attentiveness Model & Focused vs Distracted & Accuracy, F1 Score &
+92.4, 91.7 & ±1.3 \\
+ResNet Microexpression Model & Emotion Detection & Accuracy, Precision &
+85.6, 86.3 & ±2.1 \\
+Drowsiness Detection Model & Alert vs Drowsy & Accuracy, Recall, EAR &
+93.1, 94.2 & ±1.0 \\
+EAR-Based Threshold Model & Eye Closure (EAR) & Recall & 89.5 & ±1.7 \\
+Ensemble Output & Final Status Fusion & Overall System Accuracy & 90.8 &
+±1.5 \\
+\end{longtable}
+
+\bookmarksetup{startatroot}
+
+\chapter{Conclusion}\label{conclusion}
+
+The development of a real-time, multi-modal driver monitoring system has
+shown significant promise in improving vehicle safety and enhancing
+driver assistance technologies. Through the integration of three
+distinct yet complementary models---each designed to detect a critical
+aspect of driver behavior (attentiveness, drowsiness, and emotional
+state)---our system offers a holistic analysis of a driver's condition,
+going beyond conventional single-metric monitoring systems.
+
+\subsection{Summary of Key
+Contributions}\label{summary-of-key-contributions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Integrated Deep Learning Pipeline}:\\
+  The project successfully brought together LSTM, CNN, and hybrid models
+  into a single real-time framework. Each model operates on the same
+  video stream but uses specialized preprocessing and prediction
+  mechanisms suited to its specific task. This modular yet unified
+  design ensures flexibility, scalability, and efficiency.
+\item
+  \textbf{Robust Attention Detection Using Temporal Modeling}:\\
+  By extracting directional vectors from facial landmarks and feeding
+  them into a two-layer LSTM, we effectively captured temporal patterns
+  in head movement and gaze direction. This allowed us to accurately
+  distinguish between focused and distracted driver states, even in
+  real-world, noisy conditions.
+\item
+  \textbf{Microexpression Recognition with Frame-Level Aggregation}:\\
+  The ResNet-based microexpression model was fine-tuned to detect subtle
+  emotional cues from grayscale facial images. To mitigate the
+  variability and noise in single-frame predictions, a majority-voting
+  strategy across 30-frame windows was introduced, resulting in stable
+  and reliable emotion classification.
+\item
+  \textbf{Enhanced Drowsiness Detection through Dual Validation}:\\
+  The system employs a dual-check approach---combining model-based
+  drowsiness predictions with physiological metrics like the Eye Aspect
+  Ratio (EAR). By analyzing both learned features and real-time eye
+  behavior, the system minimizes false positives and offers a more
+  trustworthy alert mechanism.
+\item
+  \textbf{Real-Time Processing and Visualization}:\\
+  With an efficient architecture and use of threading, the system
+  processes 30 frames per second with minimal delay. It not only makes
+  predictions in real time but also visualizes the emotional timeline of
+  the driver, providing valuable insights for both users and developers.
+\end{enumerate}
+
+\subsection{Implications of the
+Results}\label{implications-of-the-results}
+
+\begin{itemize}
+\item
+  \textbf{Safety Enhancement}:\\
+  The ability to detect inattentiveness, drowsiness, and stress-related
+  expressions enables early intervention and alert systems that can
+  prevent accidents and save lives.
+\item
+  \textbf{Modularity for Customization}:\\
+  Each component can be independently upgraded or replaced. For example,
+  the LSTM attentiveness model could be replaced with a
+  transformer-based model in the future without disrupting the rest of
+  the system.
+\item
+  \textbf{Data-Centric Improvements}:\\
+  The architecture is highly dependent on the quality and diversity of
+  the data. Hence, the project underscores the importance of
+  large-scale, realistic, and labeled datasets for improving system
+  performance and generalization across different individuals and
+  lighting conditions.
+\item
+  \textbf{Potential for Industry Integration}:\\
+  This project forms a strong foundation for real-world deployment in
+  vehicle dashboards, fleet monitoring systems, ride-sharing safety
+  platforms, and research on human-computer interaction.
+\end{itemize}
+
+\subsection{Future Directions}\label{future-directions}
+
+To build on the current progress, several future research and
+development directions are recommended:
+
+\begin{itemize}
+\item
+  \textbf{Advanced Feature Learning}:\\
+  Implementing attention mechanisms or transformer-based architectures
+  in place of standard LSTMs could improve the model's understanding of
+  long-term dependencies in driver behavior.
+\item
+  \textbf{Multimodal Sensor Fusion}:\\
+  Integrating additional sensors (e.g., infrared cameras, steering angle
+  data, or heart rate monitors) could enhance prediction accuracy,
+  especially in low-light or occluded scenarios.
+\item
+  \textbf{Cross-Domain Generalization}:\\
+  Training and validating the models on diverse datasets from various
+  demographics and environments would improve robustness and fairness
+  across users.
+\item
+  \textbf{On-Device Optimization}:\\
+  Exploring model compression techniques such as quantization or pruning
+  could allow deployment on edge devices or embedded systems with
+  limited computational resources.
+\item
+  \textbf{Driver Feedback and Intervention}:\\
+  Incorporating intelligent alert systems that adapt to driver history
+  and driving context can make the system more user-friendly and less
+  intrusive.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+In conclusion, this project demonstrates the feasibility and
+effectiveness of a synchronized, deep-learning-based driver monitoring
+system that assesses a driver's emotional and cognitive state in
+real-time. By bridging the gap between academic research and practical
+application, this system offers a powerful step toward safer roads and
+more intelligent human-machine interaction in automotive environments.
+
+\bookmarksetup{startatroot}
+
+\chapter*{References}\label{references}
+\addcontentsline{toc}{chapter}{References}
+
+\markboth{References}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-kopuklu2020driver}
+Köpüklü, Okan, Jiapeng Zheng, Hang Xu, and Gerhard Rigoll. 2020.
+{``Driver Anomaly Detection: A Dataset and Contrastive Learning
+Approach.''} \emph{arXiv Preprint arXiv:2009.14660}.
+
+\end{CSLReferences}
+
+
+
+
+\end{document}

@@ -1,0 +1,30 @@
+## Main Files (Scripts you run directly)
+
+These are the entry points of your pipeline:
+
+### **`create_dataset.py`**
+- **Purpose**: Converts labeled videos into feature sequences.  
+- **Outputs**:  
+  - `X_sequences.npy` (Feature sequences)  
+  - `y_labels.npy` (Corresponding labels)  
+
+### **`train.py`**
+- **Purpose**: Loads `.npy` files and trains the LSTM model.  
+- **Output**:  
+  - `focus_model.pth` (Trained model weights)  
+
+### **`infer.py`**
+- **Purpose**: Loads the trained model and performs real-time prediction from a webcam feed.  
+
+---
+
+## **Support Modules (Used by the above)**
+
+### **`feature_extractor.py`**
+- Extracts eye gaze and head direction from a single frame using **MediaPipe**.  
+
+### **`prepare_sequences.py`**
+- Breaks down a full video into feature sequences (uses `feature_extractor.py`).  
+
+### **`model.py`**
+- Defines the `FocusLSTM` neural network architecture (used in both training and inference).  
